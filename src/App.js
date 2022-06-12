@@ -1,16 +1,16 @@
 import * as React from "react";
 import "./App.css";
 import { faker } from "@faker-js/faker";
+import UserList from "./components/UserList";
+import UserListVirtualized from "./components/UserListVirtualized";
 
 function App() {
     const [users, setUsers] = React.useState([]);
+    const [date, setDate] = React.useState(new Date());
 
+    //generate user list from faker
     React.useEffect(() => {
-        findAndSetUserList();
-    }, []);
-
-    const findAndSetUserList = () => {
-        let list = [...Array(100).keys()].map((key) => {
+        let list = [...Array(10).keys()].map(() => {
             return {
                 id: faker.datatype.uuid(),
                 username: faker.internet.userName(),
@@ -18,20 +18,27 @@ function App() {
             };
         });
         setUsers(list);
-    };
+    }, []);
+
+    // maintain interval and update date accordingly
+    React.useEffect(() => {
+        let interval = setInterval(() => {
+            setDate(new Date());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="App">
-            <div className="users">
-                {users.map((user) => {
-                    return (
-                        <div key={user.id} className="user">
-                            <div className="username">{user.username}</div>
-                            <div className="email">{user.email}</div>
-                        </div>
-                    );
-                })}
-            </div>
+            <p>
+                <b>{date.toISOString()}</b>
+            </p>
+
+            {/* Normal way */}
+            <UserList users={users} />
+
+            {/* Using react virtualized library */}
+            {/* <UserListVirtualized users={users} /> */}
         </div>
     );
 }
