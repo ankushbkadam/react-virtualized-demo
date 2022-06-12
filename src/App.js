@@ -10,11 +10,16 @@ function App() {
 
     //generate user list from faker
     React.useEffect(() => {
-        let list = [...Array(10).keys()].map(() => {
+        let list = [...Array(10000).keys()].map(() => {
             return {
                 id: faker.datatype.uuid(),
-                username: faker.internet.userName(),
+                username: faker.name.firstName() + " " + faker.name.lastName(),
                 email: faker.internet.email(),
+                desc:
+                    faker.lorem.paragraph() +
+                    faker.lorem.paragraph() +
+                    faker.lorem.paragraph() +
+                    faker.lorem.paragraph(),
             };
         });
         setUsers(list);
@@ -35,10 +40,10 @@ function App() {
             </p>
 
             {/* Normal way */}
-            <UserList users={users} />
+            {/* <UserList users={users} /> */}
 
             {/* Using react virtualized library */}
-            {/* <UserListVirtualized users={users} /> */}
+            <UserListVirtualized users={users} />
         </div>
     );
 }
